@@ -256,7 +256,7 @@
             </tbody>
         </table>
 
-        <h3>Firma del Supervisor / Responsable</h3>
+        <h3>Firma del Responsable</h3>
         <canvas id="firma"></canvas>
         <button onclick="limpiarFirma()">Limpiar Firma</button>
 
@@ -313,23 +313,25 @@
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
             };
 
-            window.generarPDF = function () {
-                const elemento = document.getElementById('formulario');
-                const options = {
-                    margin: 0.3,
-                    filename: 'formulario_mantenimiento.pdf',
-                    image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { scale: 2 },
-                    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-                };
-                html2pdf().from(elemento).set(options).save();
-            };
+         window.generarPDF = function () {
+               const elemento = document.getElementById('formulario');
+               const options = {
+               margin:       [0.5, 0.5, 0.5, 0.5], // márgenes top, left, bottom, right
+               filename:     'formulario_mantenimiento.pdf',
+               image:        { type: 'jpeg', quality: 0.98 },
+               html2canvas:  { scale: 2, useCORS: true },
+               jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
+               pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+    };
 
-            window.enviarWhatsApp = function () {
-                const mensaje = encodeURIComponent("Hola, te envío el formulario de mantenimiento como PDF. Recordá descargarlo y adjuntarlo desde tu celular.");
-                const url = `https://wa.me/?text=${mensaje}`;
-                window.open(url, '_blank');
-            };
+    html2pdf().set(options).from(elemento).save();
+};
+             window.enviarWhatsApp = function () {
+                 const mensaje = `Hola 👋%0A%0ATe envío el formulario de mantenimiento como PDF.%0A%0A📌 Recordá descargarlo desde tu navegador y adjuntarlo desde tu celular o PC.%0A%0ASaludos!`;
+                 const url = `https://wa.me/?text=${mensaje}`;
+                 window.open(url, '_blank');
+};
+
 
             window.enviarEmail = function () {
                 const asunto = encodeURIComponent("Formulario de Mantenimiento Eléctrico");
