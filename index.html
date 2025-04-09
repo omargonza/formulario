@@ -1,397 +1,275 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Formulario de Mantenimiento</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Parte de Mantenimiento</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 15px;
-            background: #f4f4f4;
-            margin: 0;
-        }
+    body {
+      font-family: Arial, sans-serif;
+      padding: 15px;
+      background-color: #f9f9f9;
+    }
 
-        .formulario {
-            background: white;
-            max-width: 900px;
-            margin: auto;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
 
-        .encabezado {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #e6e6e6;
-            padding: 10px;
-        }
+    form {
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      max-width: 800px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
 
-        .encabezado img {
-            height: 40px;
-        }
+    .grupo {
+      margin-bottom: 12px;
+    }
 
-        .encabezado h1 {
-            font-size: 18px;
-            text-align: center;
-            flex: 1;
-        }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
 
-        h3 {
-            margin-top: 20px;
-        }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
 
-        label {
-            font-weight: bold;
-        }
+    textarea {
+      resize: vertical;
+    }
 
-        .fila {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 10px;
-        }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
 
-        .campo {
-            flex: 1;
-            min-width: 150px;
-        }
+    th, td {
+      border: 1px solid #aaa;
+      padding: 6px;
+      text-align: left;
+    }
 
-        input,
-        textarea,
-        select {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-        }
+    th {
+      background-color: #eee;
+    }
 
-        .checkboxes {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin: 10px 0;
-        }
+    #firmaCanvas {
+      width: 100%;
+      height: 150px;
+      border: 1px solid #000;
+      touch-action: none;
+    }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-        table, h3, textarea, .checkboxes, .fila {
-            page-break-inside: avoid;
-        }
+    .botones {
+      text-align: center;
+      margin-top: 15px;
+    }
 
+    .botones button {
+      margin: 5px;
+      padding: 10px 15px;
+      font-size: 14px;
+      border: none;
+      border-radius: 4px;
+      background-color: #007bff;
+      color: #fff;
+      cursor: pointer;
+    }
 
-        th,
-        td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
-        }
+    .botones button:hover {
+      background-color: #0056b3;
+    }
 
-        .botones {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 20px;
-            justify-content: center;
-        }
-
-        button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 8px;
-            background: #007B55;
-            color: white;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        button:hover {
-            background: #005f3a;
-        }
-
-        canvas {
-            border: 1px solid #ccc;
-            width: 100%;
-            height: 100px;
-            touch-action: none;
-        }
-    </style>
+    /* Salto de página para impresión */
+    @media print {
+      .salto-pagina {
+        page-break-before: always;
+      }
+    }
+  </style>
 </head>
-
 <body>
-    <div class="formulario" id="formulario">
-        <div class="encabezado">
-            <img src="logoverde.png" alt="Logo 1" />
-            <h1>ORDEN DE TRABAJO - MANTENIMIENTO ELÉCTRICO</h1>
-            <img src="logoAutopista.png" alt="Logo 2" />
-        </div>
-
-        <h3>Datos Generales</h3>
-        <div class="fila">
-            <div class="campo"><label>Fecha:</label><input type="date" /></div>
-            <div class="campo"><label>Hora Inicio:</label><input type="time" /></div>
-            <div class="campo"><label>Hora Fin:</label><input type="time" /></div>
-        </div>
-
-        <h3>Tipo de Mantenimiento</h3>
-        <div class="checkboxes">
-            <label><input type="checkbox" /> Preventivo</label>
-            <label><input type="checkbox" /> Correctivo</label>
-            <label><input type="checkbox" /> Daños Terceros</label>
-            <label><input type="checkbox" /> Obras Nuevas</label>
-        </div>
-
-        <div class="fila">
-            <div class="campo"><label>Tablero:</label><input type="text" /></div>
-            <div class="campo"><label>Ubicación:</label><input type="text" /></div>
-        </div>
-
-        <div class="fila">
-            <div class="campo"><label>Vehículo Utilizado:</label><input type="text" /></div>
-            <div class="campo"><label>Km Inicial:</label><input type="number" /></div>
-            <div class="campo"><label>Km Final:</label><input type="number" /></div>
-        </div>
-
-        <h3>Descripción de la tarea realizada</h3>
-        <textarea rows="8"></textarea>
-
-        <h3>Técnicos que realizaron la tarea</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Legajo</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><input type="text" /></td>
-                    <td><input type="text" /></td>
-                </tr>
-                <tr>
-                    <td><input type="text" /></td>
-                    <td><input type="text" /></td>
-                </tr>
-                <tr>
-                    <td><input type="text" /></td>
-                    <td><input type="text" /></td>
-                </tr>
-            </tbody>
-        </table>
-
-        <h3>Materiales Utilizados</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Material</th>
-                    <th>Cantidad</th>
-                    <th>Unidad/Mts</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- 12 filas -->
-                <tr>
-                    <td><input type="text" /></td>
-                    <td><input type="number" /></td>
-                    <td><input type="text" /></td>
-                </tr>
-                <tr>
-                    <td><input type="text" /></td>
-                    <td><input type="number" /></td>
-                    <td><input type="text" /></td>
-                </tr>
-                <tr>
-                    <td><input type="text" /></td>
-                    <td><input type="number" /></td>
-                    <td><input type="text" /></td>
-                </tr>
-                <tr>
-                    <td><input type="text" /></td>
-                    <td><input type="number" /></td>
-                    <td><input type="text" /></td>
-                </tr>
-                <tr>
-                    <td><input type="text" /></td>
-                    <td><input type="number" /></td>
-                    <td><input type="text" /></td>
-                </tr>
-                <tr>
-                    <td><input type="text" /></td>
-                    <td><input type="number" /></td>
-                    <td><input type="text" /></td>
-                </tr>
-
-            </tbody>
-        </table>
-
-        <h3>Firma del Supervisor / Responsable</h3>
-        <canvas id="firma"></canvas>
-        <button onclick="limpiarFirma()">Limpiar Firma</button>
-
-        <div class="botones">
-            <button onclick="generarPDF()">Generar PDF</button>
-            <button onclick="enviarWhatsApp()">Enviar por WhatsApp</button>
-            <button onclick="enviarEmail()">Enviar por Correo</button>
-
-        </div>
+  <h1>Parte de Mantenimiento</h1>
+  <form id="formulario">
+    <!-- Primera página -->
+    <div class="grupo">
+      <label>Fecha</label>
+      <input type="date" name="fecha" required>
+    </div>
+    <div class="grupo">
+      <label>Hora de Inicio</label>
+      <input type="time" name="hora_inicio" required>
+    </div>
+    <div class="grupo">
+      <label>Hora de Fin</label>
+      <input type="time" name="hora_fin" required>
+    </div>
+    <div class="grupo">
+      <label>Tipo de Mantenimiento</label>
+      <select name="tipo" required>
+        <option value="Preventivo">Preventivo</option>
+        <option value="Correctivo">Correctivo</option>
+        <option value="Urgente">Urgente</option>
+      </select>
+    </div>
+    <div class="grupo">
+      <label>Sector</label>
+      <input type="text" name="sector" required>
+    </div>
+    <div class="grupo">
+      <label>Ubicación</label>
+      <input type="text" name="ubicacion" required>
+    </div>
+    <div class="grupo">
+      <label>Descripción de la Tarea Realizada</label>
+      <textarea rows="10" name="descripcion" required></textarea>
     </div>
 
-    <script>
-        window.onload = function () {
-            const canvas = document.getElementById('firma');
-            const ctx = canvas.getContext('2d');
-            let dibujando = false;
+    <!-- Salto de página para impresión -->
+    <div class="salto-pagina"></div>
 
-            canvas.addEventListener('mousedown', () => dibujando = true);
-            canvas.addEventListener('mouseup', () => dibujando = false);
-            canvas.addEventListener('mousemove', dibujar);
+    <!-- Segunda página (dorso) -->
+    <h2>Técnicos</h2>
+    <div class="grupo">
+      <label>Técnico 1 (Legajo)</label>
+      <input type="text" name="tecnico1">
+    </div>
+    <div class="grupo">
+      <label>Técnico 2 (Legajo)</label>
+      <input type="text" name="tecnico2">
+    </div>
+    <div class="grupo">
+      <label>Técnico 3 (Legajo)</label>
+      <input type="text" name="tecnico3">
+    </div>
 
-            canvas.addEventListener('touchstart', () => dibujando = true);
-            canvas.addEventListener('touchend', () => dibujando = false);
-            canvas.addEventListener('touchmove', function (e) {
-                const touch = e.touches[0];
-                const rect = canvas.getBoundingClientRect();
-                const x = touch.clientX - rect.left;
-                const y = touch.clientY - rect.top;
-                if (dibujando) {
-                    ctx.lineWidth = 2;
-                    ctx.lineCap = 'round';
-                    ctx.lineTo(x, y);
-                    ctx.stroke();
-                    ctx.beginPath();
-                    ctx.moveTo(x, y);
-                }
-                e.preventDefault();
-            }, { passive: false });
+    <h2>Materiales Utilizados</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Material</th>
+          <th>Cantidad</th>
+        </tr>
+      </thead>
+      <tbody id="materialesBody">
+        <tr>
+          <td><input type="text" name="material[]"></td>
+          <td><input type="number" name="cantidad[]" min="1"></td>
+        </tr>
+      </tbody>
+    </table>
+    <button type="button" onclick="agregarMaterial()">Agregar Material</button>
 
-            function dibujar(e) {
-                if (!dibujando) return;
-                const rect = canvas.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                ctx.lineWidth = 2;
-                ctx.lineCap = 'round';
-                ctx.lineTo(x, y);
-                ctx.stroke();
-                ctx.beginPath();
-                ctx.moveTo(x, y);
-            }
+    <h2>Firma del Responsable</h2>
+    <canvas id="firmaCanvas"></canvas>
+    <div class="botones">
+      <button type="button" onclick="limpiarFirma()">Limpiar Firma</button>
+      <button type="button" onclick="enviarWhatsApp()">Enviar por WhatsApp</button>
+      <button type="button" onclick="descargarPDF()">Descargar PDF</button>
+    </div>
+  </form>
 
-            window.limpiarFirma = function () {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-            };
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    // Firma en canvas
+    const canvas = document.getElementById("firmaCanvas");
+    const ctx = canvas.getContext("2d");
+    let dibujando = false;
 
-            //   window.generarPDF = function () {
-            //     const elemento = document.getElementById('formulario');
-            //   const options = {
-            //      margin:       [0.5, 0.5, 0.5, 0.5], // márgenes top, left, bottom, right
-            //     filename:     'formulario_mantenimiento.pdf',
-            //    image:        { type: 'jpeg', quality: 0.98 },
-            //   html2canvas:  { scale: 2, useCORS: true },
-            //  jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
-            // pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
-            //};
+    const iniciarDibujo = (e) => {
+      dibujando = true;
+      ctx.beginPath();
+      const rect = canvas.getBoundingClientRect();
+      ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+    };
 
-            // html2pdf().set(options).from(elemento).save();
-            // };
+    const dibujar = (e) => {
+      if (!dibujando) return;
+      const rect = canvas.getBoundingClientRect();
+      ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+      ctx.stroke();
+    };
 
-            window.generarPDF = function () {
-                const formulario = document.getElementById('formulario');
-                const inputs = formulario.querySelectorAll('input, textarea, select');
-                let datosValidos = true;
-            
-                // Validación de campos importantes (excepto Materiales)
-                inputs.forEach((input) => {
-                    const esMaterialCampo = input.closest('table') && input.closest('table').querySelector('thead th').textContent.includes('Material');
-            
-                    if (input.type === 'text' || input.type === 'textarea') {
-                        if (input.value.trim() === '' && !esMaterialCampo) {
-                            datosValidos = false;
-                            alert(`Por favor, completa el campo: ${input.previousElementSibling.textContent}`);
-                            return;
-                        }
-                    }
-            
-                    if (input.type === 'number') {
-                        if ((input.value === '' || isNaN(input.value)) && !esMaterialCampo) {
-                            datosValidos = false;
-                            alert(`El campo ${input.previousElementSibling.textContent} debe ser numérico.`);
-                            return;
-                        }
-                    }
-            
-                    if (input.type === 'date' || input.type === 'time') {
-                        if (input.value === '') {
-                            datosValidos = false;
-                            alert(`Por favor, ingresa una fecha u hora válida en: ${input.previousElementSibling.textContent}`);
-                            return;
-                        }
-                    }
-                });
-            
-                if (!datosValidos) {
-                    return; // Detener el proceso si las validaciones fallan
-                }
-            
-                // Esperar antes de generar el PDF para asegurar que todo esté completamente renderizado
-               setTimeout(() => {
-               const opciones = {
-                  margin: [5, 10, 5, 10], // TOP, RIGHT, BOTTOM, LEFT en milímetros
-                  filename: 'formulario_mantenimiento.pdf',
-                  image: { type: 'jpeg', quality: 0.98 },
-                  html2canvas: {
-                  scale: 2,
-                  useCORS: true,
-                  scrollY: 0 // evita efecto de desplazamiento vertical
-                },
-                   jsPDF: {
-                 unit: 'mm',
-                   format: 'a4',
-                     orientation: 'portrait',
-               },
-                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-               };
+    const terminarDibujo = () => {
+      dibujando = false;
+      ctx.closePath();
+    };
 
+    canvas.addEventListener("mousedown", iniciarDibujo);
+    canvas.addEventListener("mousemove", dibujar);
+    canvas.addEventListener("mouseup", terminarDibujo);
+    canvas.addEventListener("touchstart", (e) => iniciarDibujo(e.touches[0]));
+    canvas.addEventListener("touchmove", (e) => {
+      dibujar(e.touches[0]);
+      e.preventDefault();
+    });
+    canvas.addEventListener("touchend", terminarDibujo);
 
-              html2pdf().set(options).from(formulario).save();
-              }, 500);
+    function limpiarFirma() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
 
-            };
-            
-            //     window.enviarWhatsApp = function () {
-            //        const mensaje = `Hola 👋%0A%0ATe envío el formulario de mantenimiento como PDF.%0A%0A📌 Recordá descargarlo desde tu navegador y adjuntarlo desde tu celular o PC.%0A%0ASaludos!`;
-            //       const url = `https://wa.me/?text=${mensaje}`;
-            //      window.open(url, '_blank');
-            // };
+    function agregarMaterial() {
+      const fila = document.createElement("tr");
+      fila.innerHTML = `
+        <td><input type="text" name="material[]"></td>
+        <td><input type="number" name="cantidad[]" min="1"></td>
+      `;
+      document.getElementById("materialesBody").appendChild(fila);
+    }
 
-            // Función corregida para enviar por WhatsApp
-            window.enviarWhatsApp = function () {
-                const mensaje = encodeURIComponent("Hola 👋, te envío el formulario de mantenimiento como PDF. Recordá descargarlo desde tu navegador y adjuntarlo manualmente.");
-                const url = `https://wa.me/?text=${mensaje}`;
-                window.open(url, '_blank');
-            };
+    function enviarWhatsApp() {
+      const form = document.forms["formulario"];
+      const datos = new FormData(form);
+      let mensaje = "🛠 *Parte de Mantenimiento*%0A";
 
-
-
-            window.enviarEmail = function () {
-                const asunto = encodeURIComponent("Formulario de Mantenimiento Eléctrico");
-                const cuerpo = encodeURIComponent("Hola,\n\nAdjunto el formulario de mantenimiento en PDF. Recordá descargarlo desde tu navegador y adjuntarlo manualmente.\n\nSaludos.");
-                const url = `mailto:?subject=${asunto}&body=${cuerpo}`;
-                window.location.href = url;
-            };
+      for (let [clave, valor] of datos.entries()) {
+        if (clave !== "material[]" && clave !== "cantidad[]") {
+          mensaje += `*${clave.replace("_", " ")}:* ${valor}%0A`;
         }
-    </script>
+      }
 
+      const materiales = datos.getAll("material[]");
+      const cantidades = datos.getAll("cantidad[]");
+      if (materiales.length) {
+        mensaje += "*Materiales:*%0A";
+        materiales.forEach((mat, i) => {
+          if (mat) mensaje += `- ${mat}: ${cantidades[i]}%0A`;
+        });
+      }
 
+      const url = `https://wa.me/?text=${mensaje}`;
+      window.open(url, "_blank");
+    }
+
+    async function descargarPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.html(document.getElementById("formulario"), {
+        callback: function (pdf) {
+          pdf.save("parte_mantenimiento.pdf");
+        },
+        x: 10,
+        y: 10,
+        width: 180,
+        windowWidth: 800
+      });
+    }
+  </script>
 </body>
-
 </html>
+
