@@ -7,6 +7,7 @@
     <title>Formulario de Mantenimiento</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
+    <style>
         body {
             font-family: Arial, sans-serif;
             padding: 15px;
@@ -313,24 +314,32 @@
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
             };
 
-         window.generarPDF = function () {
-               const elemento = document.getElementById('formulario');
-               const options = {
-               margin:       [0.5, 0.5, 0.5, 0.5], // márgenes top, left, bottom, right
-               filename:     'formulario_mantenimiento.pdf',
-               image:        { type: 'jpeg', quality: 0.98 },
-               html2canvas:  { scale: 2, useCORS: true },
-               jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
-               pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
-    };
+         // Función corregida para generar PDF
+            window.generarPDF = function () {
+                const elemento = document.getElementById('formulario');
+                if (elemento) {
+                    const options = {
+                        margin: [0.5, 0.5, 0.5, 0.5],
+                        filename: 'formulario_mantenimiento.pdf',
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2, useCORS: true },
+                        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+                        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+                    };
+                    html2pdf().set(options).from(elemento).save();
+                } else {
+                    console.error("No se pudo encontrar el elemento con id 'formulario'");
+                }
+            };
 
     html2pdf().set(options).from(elemento).save();
 };
-             window.enviarWhatsApp = function () {
-                 const mensaje = `Hola 👋%0A%0ATe envío el formulario de mantenimiento como PDF.%0A%0A📌 Recordá descargarlo desde tu navegador y adjuntarlo desde tu celular o PC.%0A%0ASaludos!`;
-                 const url = `https://wa.me/?text=${mensaje}`;
-                 window.open(url, '_blank');
-};
+               // Función corregida para enviar por WhatsApp
+            window.enviarWhatsApp = function () {
+                const mensaje = encodeURIComponent("Hola 👋, te envío el formulario de mantenimiento como PDF. Recordá descargarlo desde tu navegador y adjuntarlo manualmente.");
+                const url = `https://wa.me/?text=${mensaje}`;
+                window.open(url, '_blank');
+            };
 
 
             window.enviarEmail = function () {
