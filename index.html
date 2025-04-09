@@ -344,14 +344,23 @@
             
                 // Esperar antes de generar el PDF para asegurar que todo esté completamente renderizado
                setTimeout(() => {
-         const options = {
-             margin:       0.2,
-             filename:     'formulario_mantenimiento.pdf',
-             image:        { type: 'jpeg', quality: 0.98 },
-             html2canvas:  { scale: 2, useCORS: true },
-             jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-             pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] } // 👈 habilita paginación automática
+               const opciones = {
+                  margin: [5, 10, 5, 10], // TOP, RIGHT, BOTTOM, LEFT en milímetros
+                  filename: 'formulario_mantenimiento.pdf',
+                  image: { type: 'jpeg', quality: 0.98 },
+                  html2canvas: {
+                  scale: 2,
+                  useCORS: true,
+                  scrollY: 0 // evita efecto de desplazamiento vertical
+                },
+                   jsPDF: {
+                 unit: 'mm',
+                   format: 'a4',
+                     orientation: 'portrait',
+               },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
                };
+
 
               html2pdf().set(options).from(formulario).save();
               }, 500);
