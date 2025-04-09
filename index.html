@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Formulario de Mantenimiento</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -224,40 +225,11 @@
                     <td><input type="number" /></td>
                     <td><input type="text" /></td>
                 </tr>
-                <tr>
-                    <td><input type="text" /></td>
-                    <td><input type="number" /></td>
-                    <td><input type="text" /></td>
-                </tr>
-                <tr>
-                    <td><input type="text" /></td>
-                    <td><input type="number" /></td>
-                    <td><input type="text" /></td>
-                </tr>
-                <tr>
-                    <td><input type="text" /></td>
-                    <td><input type="number" /></td>
-                    <td><input type="text" /></td>
-                </tr>
-                <tr>
-                    <td><input type="text" /></td>
-                    <td><input type="number" /></td>
-                    <td><input type="text" /></td>
-                </tr>
-                <tr>
-                    <td><input type="text" /></td>
-                    <td><input type="number" /></td>
-                    <td><input type="text" /></td>
-                </tr>
-                <tr>
-                    <td><input type="text" /></td>
-                    <td><input type="number" /></td>
-                    <td><input type="text" /></td>
-                </tr>
+
             </tbody>
         </table>
 
-        <h3>Firma del Responsable</h3>
+        <h3>Firma del Supervisor / Responsable</h3>
         <canvas id="firma"></canvas>
         <button onclick="limpiarFirma()">Limpiar Firma</button>
 
@@ -314,32 +286,92 @@
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
             };
 
-         // Función corregida para generar PDF
-            window.generarPDF = function () {
-                const elemento = document.getElementById('formulario');
-                if (elemento) {
-                    const options = {
-                        margin: [0.5, 0.5, 0.5, 0.5],
-                        filename: 'formulario_mantenimiento.pdf',
-                        image: { type: 'jpeg', quality: 0.98 },
-                        html2canvas: { scale: 2, useCORS: true },
-                        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
-                        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-                    };
-                    html2pdf().set(options).from(elemento).save();
-                } else {
-                    console.error("No se pudo encontrar el elemento con id 'formulario'");
-                }
-            };
+            //   window.generarPDF = function () {
+            //     const elemento = document.getElementById('formulario');
+            //   const options = {
+            //      margin:       [0.5, 0.5, 0.5, 0.5], // márgenes top, left, bottom, right
+            //     filename:     'formulario_mantenimiento.pdf',
+            //    image:        { type: 'jpeg', quality: 0.98 },
+            //   html2canvas:  { scale: 2, useCORS: true },
+            //  jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
+            // pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+            //};
 
-    html2pdf().set(options).from(elemento).save();
-};
-               // Función corregida para enviar por WhatsApp
+            // html2pdf().set(options).from(elemento).save();
+            // };
+
+            window.generarPDF = function () {
+                const formulario = document.getElementById('formulario');
+                const inputs = formulario.querySelectorAll('input, textarea, select');
+                let datosValidos = true;
+            
+                // Validación de campos importantes (excepto Materiales)
+                inputs.forEach((input) => {
+                    const esMaterialCampo = input.closest('table') && input.closest('table').querySelector('thead th').textContent.includes('Material');
+            
+                    if (input.type === 'text' || input.type === 'textarea') {
+                        if (input.value.trim() === '' && !esMaterialCampo) {
+                            datosValidos = false;
+                            alert(`Por favor, completa el campo: ${input.previousElementSibling.textContent}`);
+                            return;
+                        }
+                    }
+            
+                    if (input.type === 'number') {
+                        if ((input.value === '' || isNaN(input.value)) && !esMaterialCampo) {
+                            datosValidos = false;
+                            alert(`El campo ${input.previousElementSibling.textContent} debe ser numérico.`);
+                            return;
+                        }
+                    }
+            
+                    if (input.type === 'date' || input.type === 'time') {
+                        if (input.value === '') {
+                            datosValidos = false;
+                            alert(`Por favor, ingresa una fecha u hora válida en: ${input.previousElementSibling.textContent}`);
+                            return;
+                        }
+                    }
+                });
+            
+                if (!datosValidos) {
+                    return; // Detener el proceso si las validaciones fallan
+                }
+            
+                // Esperar antes de generar el PDF para asegurar que todo esté completamente renderizado
+                setTimeout(() => {
+                    html2canvas(formulario, {
+                        useCORS: true, // Asegura el procesamiento de imágenes externas
+                        scale: 3 // Mejora la calidad del PDF
+                    }).then((canvas) => {
+                        const options = {
+                            margin: 0.5,
+                            filename: 'formulario_mantenimiento.pdf',
+                            image: { type: 'jpeg', quality: 0.98 },
+                            html2canvas: { scale: 3 },
+                            jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' } // Configuración del PDF
+                        };
+                        html2pdf().set(options).from(canvas).save();
+                    }).catch((error) => {
+                        console.error("Error generando el PDF:", error);
+                        alert("Hubo un problema al generar el PDF. Revisa la consola para más detalles.");
+                    });
+                }, 500); // Retardo de 500 milisegundos
+            };
+            
+            //     window.enviarWhatsApp = function () {
+            //        const mensaje = `Hola 👋%0A%0ATe envío el formulario de mantenimiento como PDF.%0A%0A📌 Recordá descargarlo desde tu navegador y adjuntarlo desde tu celular o PC.%0A%0ASaludos!`;
+            //       const url = `https://wa.me/?text=${mensaje}`;
+            //      window.open(url, '_blank');
+            // };
+
+            // Función corregida para enviar por WhatsApp
             window.enviarWhatsApp = function () {
                 const mensaje = encodeURIComponent("Hola 👋, te envío el formulario de mantenimiento como PDF. Recordá descargarlo desde tu navegador y adjuntarlo manualmente.");
                 const url = `https://wa.me/?text=${mensaje}`;
                 window.open(url, '_blank');
             };
+
 
 
             window.enviarEmail = function () {
