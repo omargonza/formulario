@@ -1,8 +1,4 @@
-from datetime import datetime
-filename = f"formulario_mantenimiento_completo_{datetime.now().strftime('%Y%m%d_%H%M%S')}.html"
-filepath = f"/mnt/data/{filename}"
 
-html_content = """
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -111,9 +107,9 @@ html_content = """
 <body>
     <div class="formulario" id="formulario">
         <div class="encabezado">
-            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..." alt="Logo 1" />
+            <img src="logoverde.png" alt="Logo 1" crossorigin="anonymous"  />
             <h1>ORDEN DE TRABAJO - MANTENIMIENTO ELÉCTRICO</h1>
-            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..." alt="Logo 2" />
+              <img src="logoAutopista.png" alt="Logo 2"  crossorigin="anonymous"   />
         </div>
         <h3>Datos Generales</h3>
         <div class="fila">
@@ -156,7 +152,36 @@ html_content = """
                 <tr><th>Material</th><th>Cantidad</th><th>Unidad/Mts</th></tr>
             </thead>
             <tbody>
-                """ + "\n".join('<tr><td><input type="text" /></td><td><input type="number" /></td><td><input type="text" /></td></tr>' for _ in range(12)) + """
+                     <tr>
+                    <td><input type="text" /></td>
+                    <td><input type="number" /></td>
+                    <td><input type="text" /></td>
+                </tr>
+                <tr>
+                    <td><input type="text" /></td>
+                    <td><input type="number" /></td>
+                    <td><input type="text" /></td>
+                </tr>
+                <tr>
+                    <td><input type="text" /></td>
+                    <td><input type="number" /></td>
+                    <td><input type="text" /></td>
+                </tr>
+                <tr>
+                    <td><input type="text" /></td>
+                    <td><input type="number" /></td>
+                    <td><input type="text" /></td>
+                </tr>
+                <tr>
+                    <td><input type="text" /></td>
+                    <td><input type="number" /></td>
+                    <td><input type="text" /></td>
+                </tr>
+                <tr>
+                    <td><input type="text" /></td>
+                    <td><input type="number" /></td>
+                    <td><input type="text" /></td>
+                </tr>
             </tbody>
         </table>
         <h3>Firma</h3>
@@ -213,10 +238,5 @@ html_content = """
     </script>
 </body>
 </html>
-"""
 
-with open(filepath, "w", encoding="utf-8") as f:
-    f.write(html_content)
-
-filepath
 
