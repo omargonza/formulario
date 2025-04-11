@@ -1,111 +1,21 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Parte de Mantenimiento Eléctrico</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            padding: 15px;
-            background: #f4f4f4;
-            margin: 0;
-        }
-        .formulario {
-            background: white;
-            max-width: 900px;
-            margin: auto;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-        .encabezado {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #e6e6e6;
-            padding: 10px;
-        }
-        .encabezado img {
-            height: 40px;
-        }
-        .encabezado h1 {
-            font-size: 18px;
-            text-align: center;
-            flex: 1;
-        }
-        h3 {
-            margin-top: 20px;
-        }
-        label {
-            font-weight: bold;
-        }
-        .fila {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 10px;
-        }
-        .campo {
-            flex: 1;
-            min-width: 150px;
-        }
-        input, textarea, select {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-        }
-        .checkboxes {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin: 10px 0;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
-        }
-        .botones {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 20px;
-            justify-content: center;
-        }
-        button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 8px;
-            background: #007B55;
-            color: white;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        button:hover {
-            background: #005f3a;
-        }
-        canvas {
-            border: 1px solid #ccc;
-            width: 100%;
-            height: 100px;
-            touch-action: none;
-        }
-    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formulario de Mantenimiento</title>
+    <link rel="stylesheet" href="CSS/style.css" />
+  
+  
 </head>
+
 <body>
     <div class="formulario" id="formulario">
         <div class="encabezado">
-            <img src="logoverde.png" alt="Logo 1" crossorigin="anonymous" />
+            <img src="assets/logoverde.png" alt="Logo 1" />
             <h1>ORDEN DE TRABAJO - MANTENIMIENTO ELÉCTRICO</h1>
-            <img src="logoAutopista.png" alt="Logo 2" crossorigin="anonymous" />
+            <img src="assets/logoAutopista.png" alt="Logo 2" />
         </div>
 
         <h3>Datos Generales</h3>
@@ -124,14 +34,9 @@
         </div>
 
         <div class="fila">
-            <div class="campo"><label>Tablero:</label><input type="text" /></div>
-            <div class="campo"><label>Ubicación:</label><input type="text" /></div>
-        </div>
-
-        <div class="fila">
-            <div class="campo"><label>Vehículo Utilizado:</label><input type="text" /></div>
-            <div class="campo"><label>Km Inicial:</label><input type="number" /></div>
-            <div class="campo"><label>Km Final:</label><input type="number" /></div>
+            <div class="campo"><label>Tablero:</label><input type="text" name="tablero" /></div>
+            <div class="campo"><label>Ubicación:</label><input type="text" name="ubicacion" /></div>
+            <div class="campo"><label>Circuito:</label><input type="text" id="circuito" /></div>
         </div>
 
         <h3>Descripción de la tarea realizada</h3>
@@ -165,76 +70,29 @@
 
         <div class="botones">
             <button onclick="limpiarFirma()">Limpiar Firma</button>
-            <button onclick="descargarPDF()">Descargar PDF</button>
+            <button onclick="generarPDF()">Generar PDF</button>
+        
         </div>
+    
+
+        <h3>Código QR</h3>
+        <div id="qrCodeContainer">
+            <div id="qrCode"></div>
+        </div>
+
+      
     </div>
 
-    <script>
-        // Firma en canvas
-        const canvas = document.getElementById('firmaCanvas');
-        const ctx = canvas.getContext('2d');
-        let dibujando = false;
+    <!-- Scripts -->
+    <!--<script src="scripts/qrcode.min.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 
-        canvas.addEventListener('mousedown', () => dibujando = true);
-        canvas.addEventListener('mouseup', () => dibujando = false);
-        canvas.addEventListener('mouseout', () => dibujando = false);
-        canvas.addEventListener('mousemove', dibujar);
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="scripts/main.js"></script>
 
-        canvas.addEventListener('touchstart', () => dibujando = true);
-        canvas.addEventListener('touchend', () => dibujando = false);
-        canvas.addEventListener('touchcancel', () => dibujando = false);
-        canvas.addEventListener('touchmove', function(e) {
-            const touch = e.touches[0];
-            const mouseEvent = new MouseEvent("mousemove", {
-                clientX: touch.clientX,
-                clientY: touch.clientY
-            });
-            canvas.dispatchEvent(mouseEvent);
-            e.preventDefault();
-        });
-
-        function dibujar(e) {
-            if (!dibujando) return;
-            const rect = canvas.getBoundingClientRect();
-            const x = (e.clientX || e.touches?.[0]?.clientX) - rect.left;
-            const y = (e.clientY || e.touches?.[0]?.clientY) - rect.top;
-            ctx.lineWidth = 2;
-            ctx.lineCap = 'round';
-            ctx.strokeStyle = '#000';
-            ctx.lineTo(x, y);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.moveTo(x, y);
-        }
-
-        function limpiarFirma() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.beginPath();
-        }
-
-        function descargarPDF() {
-            const formulario = document.getElementById("formulario");
-            const firmaImg = canvas.toDataURL("image/png");
-
-            const firmaContainer = document.createElement('div');
-            firmaContainer.style.marginTop = '10px';
-            firmaContainer.innerHTML = `<img src="${firmaImg}" style="width:100%;border:1px solid #ccc;" />`;
-            formulario.appendChild(firmaContainer);
-
-            const opt = {
-                margin:       [0.5, 0.5, 0.5, 0.5], // Top, Left, Bottom, Right (en pulgadas)
-                filename:     'parte-mantenimiento.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-            };
-
-            html2pdf().set(opt).from(formulario).save().then(() => {
-                firmaContainer.remove();
-            });
-        }
-    </script>
+   
 </body>
-</html>
 
+</html>
 
