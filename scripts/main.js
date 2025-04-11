@@ -110,8 +110,8 @@ document.addEventListener('DOMContentLoaded', () => {
             qrContainer.innerHTML = ""; // Limpiar QR previo si existe
             new QRCode(qrContainer, {
                 text: qrData,
-                width: 200, // Aumenta el tamaño en píxeles
-                height: 200,
+                width: 150, // Aumenta el tamaño en píxeles
+                height: 150,
                 correctLevel: QRCode.CorrectLevel.L // Nivel de corrección más bajo (L)
             });
         } catch (error) {
