@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Formulario de Mantenimiento</title>
     <link rel="stylesheet" href="CSS/style.css" />
-  
-  
+
+
 </head>
 
 <body>
@@ -44,43 +44,67 @@
 
         <h3>Técnicos que realizaron la tarea</h3>
         <table>
-            <thead><tr><th>Nombre</th><th>Legajo</th></tr></thead>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Legajo</th>
+                </tr>
+            </thead>
             <tbody>
-                <tr><td><input type="text" /></td><td><input type="text" /></td></tr>
-                <tr><td><input type="text" /></td><td><input type="text" /></td></tr>
-                <tr><td><input type="text" /></td><td><input type="text" /></td></tr>
+                <tr>
+                    <td><input type="text" /></td>
+                    <td><input type="text" /></td>
+                </tr>
+                <tr>
+                    <td><input type="text" /></td>
+                    <td><input type="text" /></td>
+                </tr>
+                <tr>
+                    <td><input type="text" /></td>
+                    <td><input type="text" /></td>
+                </tr>
             </tbody>
         </table>
 
-        <h3>Materiales Utilizados</h3>
-        <table>
-            <thead><tr><th>Material</th><th>Cantidad</th><th>Unidad/Mts</th></tr></thead>
+        <h2>Materiales Utilizados</h2>
+        <table id="tablaMateriales">
+            <thead>
+                <tr>
+                    <th>Material</th>
+                    <th>Cantidad</th>
+                    <th>Unidad</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
             <tbody>
-                <tr><td><input type="text" /></td><td><input type="number" /></td><td><input type="text" /></td></tr>
-                <tr><td><input type="text" /></td><td><input type="number" /></td><td><input type="text" /></td></tr>
-                <tr><td><input type="text" /></td><td><input type="number" /></td><td><input type="text" /></td></tr>
-                <tr><td><input type="text" /></td><td><input type="number" /></td><td><input type="text" /></td></tr>
-                <tr><td><input type="text" /></td><td><input type="number" /></td><td><input type="text" /></td></tr>
-                <tr><td><input type="text" /></td><td><input type="number" /></td><td><input type="text" /></td></tr>
+                <tr>
+                    <td><input type="text" name="material[]"></td>
+                    <td><input type="number" name="cantidad[]"></td>
+                    <td><input type="text" name="unidad[]"></td>
+                    <td><button type="button" onclick="eliminarFila(this)">Eliminar</button></td>
+                </tr>
             </tbody>
         </table>
+        <div class="botones">
+            <button type="button" onclick="agregarFila()">+ Agregar Material</button>
+        </div>
 
-        <h3>Firma</h3>
+        <h3>Firma del Responsable</h3>
         <canvas id="firmaCanvas"></canvas>
 
         <div class="botones">
             <button onclick="limpiarFirma()">Limpiar Firma</button>
             <button onclick="generarPDF()">Generar PDF</button>
-        
+
         </div>
-    
+
 
         <h3>Código QR</h3>
         <div id="qrCodeContainer">
             <div id="qrCode"></div>
         </div>
 
-      
+
     </div>
 
     <!-- Scripts -->
@@ -89,10 +113,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="scripts/main.js"></script>
+    <script src="scripts/main.js"></script>
 
-   
+
 </body>
 
 </html>
-
