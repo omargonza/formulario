@@ -1,12 +1,40 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Función principal para generar el PDF
+    /***************************
+     * Función: actualizarContadorDescripcion
+     * Actualiza el contador de caracteres usados en el textarea de descripción.
+     * Se asigna a window para que esté disponible globalmente.
+     ***************************/
+    window.actualizarContadorDescripcion = function () {
+      const descripcion = document.getElementById("descripcion");
+      const contador = document.getElementById("contadorQR");
+      const MAX_QR_LENGTH = 1200; // Límite máximo para el QR (ajustable según nivel de corrección)
+  
+      if (descripcion && contador) {
+        const largo = descripcion.value.trim().length;
+        contador.textContent = `Tamaño del QR: ${largo} / ${MAX_QR_LENGTH} caracteres`;
+        // Cambiar color si se acerca o supera el límite
+        if (largo > MAX_QR_LENGTH) {
+          contador.style.color = "red";
+        } else {
+          contador.style.color = "gray";
+        }
+      }
+    };
+  
+    /***************************
+     * Función: generarPDF
+     * Valida el formulario, genera el código QR y luego crea el PDF.
+     ***************************/
     window.generarPDF = function () {
+      // Obtener el formulario
       const formulario = document.getElementById("formulario");
       if (!formulario) {
         alert("El formulario no existe. Por favor, verifica el HTML.");
         return;
       }
   
+      // Validación: Recorrer campos de entrada (inputs, textarea y select) 
+      // excepto para aquellos de la tabla de materiales
       const inputs = formulario.querySelectorAll("input, textarea, select");
       let datosValidos = true;
   
@@ -14,10 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
         inputs.forEach((input) => {
           const esMaterialCampo =
             input.closest("table") &&
-            input
-              .closest("table")
-              .querySelector("thead th")
-              .textContent.includes("Material");
+            input.closest("table").querySelector("thead th")?.textContent.includes("Material");
   
           if ((input.type === "text" || input.tagName === "TEXTAREA") && !esMaterialCampo) {
             if (input.value.trim() === "") {
@@ -36,23 +61,33 @@ document.addEventListener("DOMContentLoaded", () => {
   
       if (!datosValidos) return;
   
-      // Generar código QR
+      // Generar el código QR utilizando la descripción y el circuito.
       try {
-        const tablero = document.querySelector('input[name="tablero"]').value;
-        const qrData = `TableroID: ${tablero}`;
-        const qrContainer = document.getElementById("qrCode");
+        // Obtener la descripción y el circuito desde sus campos.
+        const descripcion = document.querySelector('textarea[name="descripcion"]').value.trim();
+        const circuito = document.getElementById("circuito").value.trim();
   
+        // Crear el contenido QR. Se elimina el uso excesivo de saltos de línea para no aumentar el tamaño.
+        const qrData = `Tarea: ${descripcion} | Circuito: ${circuito}`;
+        const MAX_QR_LENGTH = 1200;
+        if (qrData.length > MAX_QR_LENGTH) {
+          alert(`El contenido del código QR es demasiado largo (${qrData.length} caracteres). Limitá la descripción o el circuito.`);
+          return;
+        }
+  
+        const qrContainer = document.getElementById("qrCode");
         if (!qrContainer) {
           console.error("Contenedor QR no encontrado");
           return;
         }
   
+        // Limpiar contenido previo del contenedor y generar nuevo QR.
         qrContainer.innerHTML = "";
         new QRCode(qrContainer, {
           text: qrData,
           width: 200,
           height: 200,
-          correctLevel: QRCode.CorrectLevel.L,
+          correctLevel: QRCode.CorrectLevel.M, // Nivel M para mayor capacidad
         });
       } catch (error) {
         console.error("Error generando QR:", error);
@@ -60,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
   
-      // Captura y genera PDF
+      // Generación del PDF utilizando html2canvas y html2pdf
       try {
         setTimeout(() => {
           const nombreArchivo = `${document.querySelector('input[name="tablero"]').value}_formulario_mantenimiento.pdf`;
@@ -69,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .then((canvas) => {
               html2pdf()
                 .set({
-                  margin: 0.5,
+                  margin: 0.15,
                   filename: nombreArchivo,
                   image: { type: "jpeg", quality: 0.98 },
                   html2canvas: { scale: 3 },
@@ -82,11 +117,12 @@ document.addEventListener("DOMContentLoaded", () => {
               console.error("Error generando PDF:", error);
               alert("Error al generar el PDF.");
             });
-        }, 1500);
+        }, 1500); // Retraso para asegurar que el QR se ha generado
       } catch (error) {
         console.error("Error general en generarPDF:", error);
       }
     };
+  });
   
     // Firma digital
     try {
@@ -157,7 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }, 2000);
     */
-  });
+
 // Función global para agregar una fila a la tabla de materiales
 function agregarFila() {
     const tabla = document.querySelector("#tablaMateriales tbody");
