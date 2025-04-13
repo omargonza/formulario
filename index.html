@@ -40,11 +40,27 @@
         </div>
 
         <h3>Descripción de la tarea realizada</h3>
-       
-       
-        <textarea id="descripcion" name="descripcion" rows="4" maxlength="800" oninput="actualizarContadorDescripcion()"></textarea>
+
+
+        <textarea id="descripcion" name="descripcion" rows="4" maxlength="800"
+            oninput="actualizarContadorDescripcion()"></textarea>
         <small id="contadorQR" style="display:block; margin-top:5px; color:gray;"></small>
         <small id="contadorDescripcion">0 / 800 caracteres</small>
+
+        <!-- Sección para capturar o subir imagen -->
+        <h3>Captura de Imagen</h3>
+        <div id="cameraContainer">
+            <!-- Video para vista previa de la cámara -->
+            <video id="video" autoplay playsinline></video>
+            <br>
+            <button type="button" id="captureBtn">Capturar Foto</button>
+            <!-- El canvas se utiliza para generar la DataURL -->
+            <canvas id="fotoCanvas" width="300" height="200"></canvas>
+        </div>
+        <p>O subí una imagen:</p>
+        <input type="file" id="uploadImg" accept="image/*">
+        <!-- Vista previa de la imagen que se incluirá en el PDF -->
+        <img id="imagenCapturada" alt="Imagen Capturada/Subida" />
 
 
         <h3>Técnicos que realizaron la tarea</h3>
@@ -98,6 +114,9 @@
         <canvas id="firmaCanvas"></canvas>
 
         <div class="botones">
+
+
+
             <button onclick="limpiarFirmaBtn()">Limpiar Firma</button>
             <button onclick="generarPDF()">Generar PDF</button>
 
