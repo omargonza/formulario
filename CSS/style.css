@@ -134,3 +134,20 @@ button:hover {
     margin: 20px 0;
   }
   
+    /* Algunas reglas básicas para el área de imagen */
+    #video {
+        border: 1px solid #ccc;
+        width: 300px;
+        height: 200px;
+        background: #000;
+      }
+      #fotoCanvas {
+        display: none;
+      }
+      #imagenCapturada {
+        max-width: 300px;
+        max-height: 200px;
+        display: block;
+        margin-top: 10px;
+        border: 1px solid #ccc;
+      }
