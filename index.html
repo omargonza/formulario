@@ -40,7 +40,12 @@
         </div>
 
         <h3>Descripción de la tarea realizada</h3>
-        <textarea rows="8"></textarea>
+       
+       
+        <textarea id="descripcion" name="descripcion" rows="4" maxlength="800" oninput="actualizarContadorDescripcion()"></textarea>
+        <small id="contadorQR" style="display:block; margin-top:5px; color:gray;"></small>
+        <small id="contadorDescripcion">0 / 800 caracteres</small>
+
 
         <h3>Técnicos que realizaron la tarea</h3>
         <table>
@@ -89,18 +94,18 @@
             <button type="button" onclick="agregarFila()">+ Agregar Material</button>
         </div>
 
-        <h3>Firma del Responsable</h3>
+        <h3>Firma</h3>
         <canvas id="firmaCanvas"></canvas>
 
         <div class="botones">
-            <button onclick="limpiarFirma()">Limpiar Firma</button>
+            <button onclick="limpiarFirmaBtn()">Limpiar Firma</button>
             <button onclick="generarPDF()">Generar PDF</button>
 
         </div>
 
 
         <h3>Código QR</h3>
-        <div id="qrCodeContainer">
+        <div id="qrCodeContainer" class="qr-no-break">
             <div id="qrCode"></div>
         </div>
 
