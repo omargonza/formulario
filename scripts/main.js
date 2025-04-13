@@ -124,6 +124,54 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   });
   
+
+   //Sección de Captura de Imagen
+
+  const video = document.getElementById("video");
+  const captureBtn = document.getElementById("captureBtn");
+  const fotoCanvas = document.getElementById("fotoCanvas");
+  const imagenCapturada = document.getElementById("imagenCapturada");
+  const uploadImg = document.getElementById("uploadImg");
+
+  // Configurar getUserMedia para usar la cámara (trasera si es posible)
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    navigator.mediaDevices.getUserMedia({
+      video: { facingMode: "environment" },
+      audio: false
+    })
+    .then(function(stream) {
+      video.srcObject = stream;
+      video.play();
+    })
+    .catch(function(err) {
+      console.error("Error al acceder a la cámara:", err);
+      alert("No se pudo acceder a la cámara.");
+    });
+  } else {
+    alert("Tu dispositivo no soporta la captura de video.");
+  }
+
+  // Capturar imagen del video
+  captureBtn.addEventListener("click", () => {
+    const context = fotoCanvas.getContext("2d");
+    context.drawImage(video, 0, 0, fotoCanvas.width, fotoCanvas.height);
+    const dataURL = fotoCanvas.toDataURL("image/png");
+    imagenCapturada.src = dataURL;
+    imagenCapturada.style.display = "block";
+  });
+
+  // Manejar carga de imagen del dispositivo
+  uploadImg.addEventListener("change", (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      imagenCapturada.src = e.target.result;
+      imagenCapturada.style.display = "block";
+    };
+    reader.readAsDataURL(file);
+  });
+
     // Firma digital
     try {
       const canvas = document.getElementById("firmaCanvas");
