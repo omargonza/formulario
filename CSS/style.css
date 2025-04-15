@@ -216,4 +216,20 @@ input[type="text"] {
     }
 }
 
+/* Contenedor responsive para tablas */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 10px;
+    border-radius: 6px;
+}
+
+/* Estilo para la tabla dentro del contenedor */
+.table-responsive table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 500px; /* Evita que las columnas se colapsen en pantallas muy pequeñas */
+}
+
+
       
