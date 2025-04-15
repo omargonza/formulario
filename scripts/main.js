@@ -28,12 +28,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const nombreArchivo = `${document.querySelector('input[name="tablero"]').value || "parte"}_mantenimiento.pdf`;
 
-    html2canvas(formulario, { useCORS: true, scale: 2 }).then((canvas) => {
-      const pdf = new jsPDF({
-        unit: "mm", // Medida en milímetros
-        format: "a4", // Formato A4
-        orientation: "portrait" // Orientación vertical
-      });
+   
+  html2canvas(formulario, { useCORS: true, scale: 2 }).then((canvas) => {
+    // ✅ Esta línea es clave:
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({
+      unit: "mm",
+      format: "a4",
+      orientation: "portrait"
+    });
+
 
       // Ajustamos el tamaño del canvas al tamaño A4
       const imgData = canvas.toDataURL("image/jpeg", 1.0); // Generamos la imagen
