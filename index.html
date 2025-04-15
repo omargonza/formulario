@@ -38,54 +38,10 @@
             <div class="campo"><label>Ubicación:</label><input type="text" name="ubicacion" /></div>
             <div class="campo"><label>Circuito:</label><input type="text" id="circuito" /></div>
         </div>
-
         <h3>Descripción de la tarea realizada</h3>
+        <textarea id="descripcion" name="descripcion" rows="10"
+            placeholder="Escriba aquí los detalles de la tarea..."></textarea>
 
-
-        <textarea id="descripcion" name="descripcion" rows="4" maxlength="800"
-            oninput="actualizarContadorDescripcion()"></textarea>
-        <small id="contadorQR" style="display:block; margin-top:5px; color:gray;"></small>
-        <small id="contadorDescripcion">0 / 800 caracteres</small>
-
-        <!-- Sección para capturar o subir imagen -->
-        <h3>Captura de Imagen</h3>
-        <div id="cameraContainer">
-            <!-- Video para vista previa de la cámara -->
-            <video id="video" autoplay playsinline></video>
-            <br>
-            <button type="button" id="captureBtn">Capturar Foto</button>
-            <!-- El canvas se utiliza para generar la DataURL -->
-            <canvas id="fotoCanvas" width="300" height="200"></canvas>
-        </div>
-        <p>O subí una imagen:</p>
-        <input type="file" id="uploadImg" accept="image/*">
-        <!-- Vista previa de la imagen que se incluirá en el PDF -->
-        <img id="imagenCapturada" alt="Imagen Capturada/Subida" />
-
-
-        <h3>Técnicos que realizaron la tarea</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Legajo</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><input type="text" /></td>
-                    <td><input type="text" /></td>
-                </tr>
-                <tr>
-                    <td><input type="text" /></td>
-                    <td><input type="text" /></td>
-                </tr>
-                <tr>
-                    <td><input type="text" /></td>
-                    <td><input type="text" /></td>
-                </tr>
-            </tbody>
-        </table>
 
         <h2>Materiales Utilizados</h2>
         <table id="tablaMateriales">
@@ -110,24 +66,49 @@
             <button type="button" onclick="agregarFila()">+ Agregar Material</button>
         </div>
 
-        <h3>Firma</h3>
-        <canvas id="firmaCanvas"></canvas>
+
+
+        <!-- Sección para capturar o subir imagen -->
+        <h3>Captura de Imagen</h3>
+        <div id="cameraContainer">
+            <button type="button" class="btn-camara" id="toggleCamaraBtn">Encender Cámara</button>
+            <button type="button" class="btn-camara" id="capturarFotoBtn" style="display:none;">Capturar Foto</button>
+            <br>
+            <video id="video" autoplay playsinline></video>
+        </div>
+
+        <p style="margin-top: 10px;">O subí una imagen desde tu galería:</p>
+        <input type="file" id="uploadImg" accept="image/*" />
+
+        <img id="imagenCapturada" alt="Imagen Capturada/Subida" />
+
+        <h2>Técnicos</h2>
+        <div class="tecnicos-container">
+            <div class="tecnico">
+                <input type="text" placeholder="Nombre" />
+                <input type="text" placeholder="Legajo" />
+            </div>
+            <div class="tecnico">
+                <input type="text" placeholder="Nombre" />
+                <input type="text" placeholder="Legajo" />
+            </div>
+            <div class="tecnico">
+                <input type="text" placeholder="Nombre" />
+                <input type="text" placeholder="Legajo" />
+            </div>
+        </div>
+
 
         <div class="botones">
+            <button type="button" class="limpiarFirmaBtn">Limpiar firma</button>
 
 
+        </div>
 
-            <button onclick="limpiarFirmaBtn()">Limpiar Firma</button>
+
+        <div class="botones">
             <button onclick="generarPDF()">Generar PDF</button>
-
         </div>
-
-
-        <h3>Código QR</h3>
-        <div id="qrCodeContainer" class="qr-no-break">
-            <div id="qrCode"></div>
-        </div>
-
 
     </div>
 
@@ -135,6 +116,7 @@
     <!--<script src="scripts/qrcode.min.js"></script>-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="scripts/main.js"></script>
