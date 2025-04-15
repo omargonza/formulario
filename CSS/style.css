@@ -1,8 +1,15 @@
+/* Reset de márgenes y padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 10px;
-    background-color: #f7f7f7;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 15px;
 }
 
 .formulario {
@@ -27,15 +34,16 @@ body {
 
 h1 {
     text-align: center;
-    font-size: 1.4rem;
-    margin: 0;
+    font-size: 1.6rem;
+    color: #003366;
 }
 
-h3 {
-    border-bottom: 2px solid #4CAF50;
+h3, h2 {
+    color: #003366;
+    border-bottom: 2px solid #0055aa;
     padding-bottom: 5px;
     margin-top: 30px;
-    color: #333;
+    font-size: 1.2rem;
 }
 
 .fila {
@@ -59,10 +67,12 @@ textarea {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 6px;
+    background-color: #f9f9f9;
 }
 
 textarea {
     resize: vertical;
+    min-height: 100px;
 }
 
 .checkboxes {
@@ -86,262 +96,124 @@ th, td {
     border: 1px solid #ccc;
     padding: 8px;
     text-align: left;
+    background-color: #f9f9f9;
 }
 
-canvas {
-    border: 1px solid #ccc;
-    width: 100%;
-    height: 200px;
-    margin: 10px 0;
-}
-
-.botones {
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
-    margin-top: 20px;
+th {
+    background-color: #e6f2ff;
 }
 
 button {
-    background-color: #4CAF50;
-    border: none;
+    background-color: #003366;
     color: white;
+    border: none;
     padding: 10px 18px;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
     font-size: 1rem;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #0055aa;
 }
 
-#qrCodeContainer {
-    text-align: center;
-    margin-top: 20px;
+#cameraContainer {
+    margin-bottom: 20px;
 }
 
-.qr-entero {
-    page-break-inside: avoid;
-    break-inside: avoid;
-    padding-top: 20px;
+#video {
+    display: none;
+    width: 100%;
+    max-width: 400px;
+    border: 2px solid #007BFF;
+    border-radius: 10px;
+    margin-top: 10px;
 }
-.qr-no-break {
-    page-break-before: always !important;
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-    display: block;
-    margin: 20px 0;
-  }
-  
-    /* Algunas reglas básicas para el área de imagen */
-    #video {
-        border: 1px solid #ccc;
-        width: 300px;
-        height: 200px;
-        background: #000;
-      }
-      #fotoCanvas {
-        display: none;
-      }
-      #imagenCapturada {
-        max-width: 300px;
-        max-height: 200px;
-        display: block;
-        margin-top: 10px;
-        border: 1px solid #ccc;
-      }
 
-      .tabla-tecnicos {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 10px;
-        font-size: 0.9em;
-      }
-      
-      .tabla-tecnicos th,
-      .tabla-tecnicos td {
-        padding: 5px;
-        border: 1px solid #ccc;
-        text-align: center;
-      }
-      
-      .input-mini {
-        width: 90px;
-        padding: 3px;
-        font-size: 0.8em;
-      }
-      
-      .firmaMini {
-        border: 1px solid #999;
-        background-color: #f9f9f9;
-        cursor: crosshair;
-        display: block;
-        margin: 0 auto;
-      }
-      
-      .contenedor-tecnicos {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        margin: 20px 0;
-      }
-      
-      .tecnico {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        flex-wrap: wrap;
-        border: 1px solid #ccc;
-        padding: 10px;
-        border-radius: 6px;
-        background-color: #f9f9f9;
-      }
-      
-      .input-mini {
-        padding: 5px 8px;
-        font-size: 14px;
-        border: 1px solid #aaa;
-        border-radius: 4px;
-        width: 140px;
-      }
-      
-      .firma-contenedor {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-      
-      .firmaMini {
-        border: 1px solid #444;
-        background-color: #fff;
-        cursor: crosshair;
-        border-radius: 4px;
-      }
-      
-      .limpiar-btn {
-        margin-top: 5px;
-        padding: 3px 8px;
-        font-size: 13px;
-        border: none;
-        background-color: #e74c3c;
-        color: white;
-        border-radius: 4px;
-        cursor: pointer;
-      }
-      
-      .limpiar-btn:hover {
-        background-color: #c0392b;
-      }
-      body {
-        font-family: Arial, sans-serif;
-        margin: 15px;
-        background-color: #f4f4f4;
-        color: #333;
-      }
-      
-      h1, h2 {
-        color: #003366;
-      }
-      
-      input, textarea, select, button {
-        margin: 5px 0;
-        padding: 8px;
-        font-size: 1em;
-      }
-      
-      canvas {
-        border: 1px solid #000;
-        background: #fff;
-        display: block;
-        margin-top: 5px;
-      }
-      
-      .tecnicos-container {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-      }
-      
-      .tecnico {
-        border: 1px solid #ccc;
-        padding: 10px;
-        background: #fff;
-      }
-      
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 10px;
-      }
-      
-      th, td {
-        border: 1px solid #aaa;
-        padding: 8px;
-        text-align: left;
-      }
-      
-      button {
-        cursor: pointer;
-        background-color: #003366;
-        color: white;
-        border: none;
-        border-radius: 5px;
-      }
-      
-      button:hover {
-        background-color: #0055aa;
-      }
+#imagenCapturada {
+    display: none;
+    width: 100%;
+    max-width: 400px;
+    border: 2px solid #28a745;
+    border-radius: 10px;
+    margin-top: 10px;
+    padding: 4px;
+}
 
+.btn-camara {
+    display: inline-block;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    margin: 5px 5px 10px 0;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
 
-      #cameraContainer {
-        margin-bottom: 20px;
-      }
-    
-      #video {
-        display: none;
-        width: 100%;
-        max-width: 400px;
-        border: 2px solid #007BFF;
-        border-radius: 10px;
-        margin-top: 10px;
-      }
-    
-      #imagenCapturada {
-        display: none;
-        width: 100%;
-        max-width: 400px;
-        border: 2px solid #28a745;
-        border-radius: 10px;
-        margin-top: 10px;
-        padding: 4px;
-      }
-    
-      .btn-camara {
-        display: inline-block;
-        background-color: #007BFF;
-        color: white;
-        border: none;
-        padding: 10px 16px;
-        margin: 5px 5px 10px 0;
-        border-radius: 6px;
-        font-weight: 500;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-      }
-    
-      .btn-camara:hover {
-        background-color: #0056b3;
-      }
-    
-      input[type="file"] {
-        margin-bottom: 10px;
-      }
-      
-      @media (max-width: 768px) {
-        .tecnicos-container {
-          flex-direction: column;
-        }
-      }
-      
+.btn-camara:hover {
+    background-color: #0056b3;
+}
+
+input[type="file"] {
+    margin-bottom: 10px;
+}
+
+.tecnicos-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.tecnico {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+}
+
+input[type="text"] {
+    padding: 5px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200px;
+}
+
+.limpiar-btn {
+    margin-top: 5px;
+    padding: 3px 8px;
+    font-size: 13px;
+    border: none;
+    background-color: #e74c3c;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.limpiar-btn:hover {
+    background-color: #c0392b;
+}
+
+@media (max-width: 768px) {
+    .tecnicos-container {
+        flex-direction: column;
+    }
+
+    .formulario {
+        padding: 20px;
+    }
+
+    .campo {
+        min-width: 100%;
+    }
+}
+
       
