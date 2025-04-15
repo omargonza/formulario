@@ -39,23 +39,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-      // Ajustamos el tamaño del canvas al tamaño A4
-      const imgData = canvas.toDataURL("image/jpeg", 1.0); // Generamos la imagen
-      const pageHeight = pdf.internal.pageSize.height; // Altura de la página A4
-      const pageWidth = pdf.internal.pageSize.width; // Ancho de la página A4
+ const imgData = canvas.toDataURL("image/jpeg", 1.0);
+    const pageHeight = pdf.internal.pageSize.height;
+    const pageWidth = pdf.internal.pageSize.width;
 
-      // Definimos el tamaño y la posición de la imagen
-      const imgWidth = pageWidth;
-      const imgHeight = canvas.height * (imgWidth / canvas.width); // Mantener proporciones
-      const yOffset = (pageHeight - imgHeight) / 2; // Centrado verticalmente
+    const imgWidth = pageWidth;
+    const imgHeight = canvas.height * (imgWidth / canvas.width);
+    const yOffset = (pageHeight - imgHeight) / 2;
 
-      pdf.addImage(imgData, "JPEG", 0, yOffset, imgWidth, imgHeight);
-      pdf.save(nombreArchivo);
-    }).catch((error) => {
-      console.error("Error al generar el PDF:", error);
-      alert("Ocurrió un error al generar el PDF.");
-    });
-  };
+    pdf.addImage(imgData, "JPEG", 0, yOffset, imgWidth, imgHeight);
+    pdf.save(nombreArchivo);
+  }).catch((error) => {
+    console.error("Error al generar el PDF:", error);
+    alert("Ocurrió un error al generar el PDF.");
+  });
+};
 
   // =========================
   // CÁMARA Y SUBIDA DE IMÁGENES
