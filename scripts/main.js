@@ -1,14 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // =========================
-  // GENERACIÓN DE PDF
-  // =========================
   window.generarPDF = function () {
     const formulario = document.getElementById("formulario");
     if (!formulario) {
       alert("Formulario no encontrado.");
       return;
     }
-
+  
     // Validar campos obligatorios (excepto materiales)
     const inputs = formulario.querySelectorAll("input, textarea, select");
     try {
@@ -25,36 +22,47 @@ document.addEventListener("DOMContentLoaded", () => {
       console.warn(err.message);
       return;
     }
-
-    const nombreArchivo = `${document.querySelector('input[name="tablero"]').value || "parte"}_mantenimiento.pdf`;
-
-   
-  html2canvas(formulario, { useCORS: true, scale: 2 }).then((canvas) => {
-    // ✅ Esta línea es clave:
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF({
-      unit: "mm",
-      format: "a4",
-      orientation: "portrait"
+  
+    // ✅ Esta línea estaba faltando antes del html2canvas
+    const nombreArchivo = `${document.querySelector('input[name="tablero"]')?.value || "parte"}_mantenimiento.pdf`;
+  
+    html2canvas(formulario, { useCORS: true, scale: 2 }).then((canvas) => {
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({
+        unit: "mm",
+        format: "a4",
+        orientation: "portrait"
+      });
+  
+      const imgData = canvas.toDataURL("image/jpeg", 1.0);
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+  
+      const imgWidth = pageWidth;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  
+      let heightLeft = imgHeight;
+      let position = 0;
+  
+      pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+  
+      while (heightLeft > 0) {
+        position -= pageHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+  
+      // ✅ Aquí usamos la variable ya definida
+      pdf.save(nombreArchivo);
+    }).catch((error) => {
+      console.error("Error al generar el PDF:", error);
+      alert("Ocurrió un error al generar el PDF.");
     });
-
-
- const imgData = canvas.toDataURL("image/jpeg", 1.0);
-    const pageHeight = pdf.internal.pageSize.height;
-    const pageWidth = pdf.internal.pageSize.width;
-
-    const imgWidth = pageWidth;
-    const imgHeight = canvas.height * (imgWidth / canvas.width);
-    const yOffset = (pageHeight - imgHeight) / 2;
-
-    pdf.addImage(imgData, "JPEG", 0, yOffset, imgWidth, imgHeight);
-    pdf.save(nombreArchivo);
-  }).catch((error) => {
-    console.error("Error al generar el PDF:", error);
-    alert("Ocurrió un error al generar el PDF.");
-  });
-};
-
+  };
+  
+  
   // =========================
   // CÁMARA Y SUBIDA DE IMÁGENES
 // =========================
