@@ -5,7 +5,6 @@ body {
     background-color: #f7f7f7;
 }
 
-
 .formulario {
     max-width: 960px;
     margin: auto;
@@ -344,4 +343,5 @@ button:hover {
           flex-direction: column;
         }
       }
+      
       
